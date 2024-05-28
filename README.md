@@ -19,6 +19,20 @@ A Python script to condense your Spotify playlist into 7 songs. It attempts to m
 
 - You should also replace the value of *redirectURI* with a suitable URL. *"http://localhost/"* works for this.
 
+### Usage
+```
+usage: 7deadlysongs.py [-h] -p PLAYLIST [-n] [-pc]
+
+A Python script to condense your Spotify playlist into 7 songs. It attempts to maximise the diversity of the songs it chooses (so it looks like you have an interesting taste in music!).
+
+options:
+  -h, --help            show this help message and exit
+  -p PLAYLIST, --playlist PLAYLIST
+                        Link to a spotify playlist. if something goes wrong try putting it in "Quotes"
+  -n, --no-playlist     Will only print out the songs and not create a playlist
+  -pc, --print-Clusters
+                        Will print all of the tracks in each clustering
+```
 ### First Run
 
 The first time you run the script, a few extra steps are required. You hopefully shouldn't have to do this again afterwards.
