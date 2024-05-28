@@ -5,15 +5,17 @@ A Python script to condense your Spotify playlist into 7 songs. It attempts to m
 
 ### Prerequisites
 
-- To get this working you'll need to make sure you have [Python](https://www.python.org/downloads/) installed.
+- [Python 3.X](https://www.python.org/downloads/)(I use 3.12).
 
-- The script relies on the [spotipy](https://pypi.org/project/spotipy/) library, so you'll also need to ensure you've got that installed.
+- [spotipy](https://pypi.org/project/spotipy/)(use `pip` to install).
+
+- [argparse](https://pypi.org/project/argparse/)(use `pip` to install).
 
 - Because I'm a bit of a cheapskate, you'll need to host your own app for this. Fortunately, Spotify provides a [handy guide](https://developer.spotify.com/documentation/web-api) which is fairly short and simple.
 
 - Once you've done so, you'll need to locate your app's Client ID and Client Secret, found in its Settings page on the Spotify for Developers dashboard.
 
-- Replace the empty string values for *clientID* and *clientSecret* in *7deadlysongs.py* with these values.
+- Replace the empty string values for *clientID* and *clientSecret* in `.env.EXAMPLE` with these values and rename it to `.env`.
 
 - You should also replace the value of *redirectURI* with a suitable URL. *"http://localhost/"* works for this.
 
