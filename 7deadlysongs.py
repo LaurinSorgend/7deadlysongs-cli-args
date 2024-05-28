@@ -2,6 +2,10 @@ import math
 import random
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+from dotenv import load_dotenv
+import os
+import argparse
+load_dotenv()
 
 k = 7
 passes = 100
@@ -21,9 +25,9 @@ attributes = {"explicit": {"numerical": False, "weight": 0.5},
 
 # Replace these empty strings with the appropriate values for your app!
 
-clientID = ""
-clientSecret = ""
-redirectURI = ""        # you can just use http://localhost/ if you need to
+clientID = os.getenv("clientID")
+clientSecret = os.getenv("clientSecret")
+redirectURI = os.getenv("redirectURI")        # you can just use http://localhost/ if you need to
 
 
 # Classes for holding relevant track data, and clusterings
@@ -257,12 +261,12 @@ def printClustering(clustering):
         print("")
 
 
-def main():
+def main(playlist, new_playlist=False, print_clusters=False):
     IDs = []
     initialPoints = []
 
     if not clientID or not clientSecret or not redirectURI:
-        print("ERROR: You need to fill in your app details in the 'clientID', 'clientSecret' and 'redirectURI' variables.")
+        print("ERROR: You need to fill in 'clientID', 'clientSecret' and 'redirectURI' in the .env file.")
         return
 
     print("Connecting to Spotify...")
@@ -273,7 +277,6 @@ def main():
                                                     client_secret=clientSecret,
                                                     redirect_uri=redirectURI))
 
-    playlist = input("Paste the URL of your playlist: ")
 
     print("Retrieving your playlist...")
     try:
@@ -343,8 +346,7 @@ def main():
     kMeans(clustering, passes)
     topPicks = pickBest(clustering)
 
-    new_playlist = input("Would you like to create a new playlist with your 7 deadly songs? (y/n): ")
-    if new_playlist == "y":
+    if new_playlist:
         newList = sp.user_playlist_create(sp.current_user()["id"], "7 deadly songs!", False, False,
                                         "A nice little selection of 7 songs to share with your friends.")
         sp.playlist_add_items(newList["id"], topPicks)
@@ -356,8 +358,35 @@ def main():
             print(" - " + sp.track(track)["artists"][0]["name"] + ": " + sp.track(track)["name"])
 
     # Un-comment the line below if you want to see all of the tracks in each clustering
-    # printClustering(clustering)
+    if print_clusters:
+        printClustering(clustering)
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(
+        description="A Python script to condense your Spotify playlist into 7 songs. It attempts to maximise the diversity of the songs it chooses (so it looks like you have an interesting taste in music!)."
+    )
+    parser.add_argument(
+        "-p",
+        "--playlist",
+        dest="playlist",
+        type=str,
+        required=True,
+        help="Link to a spotify playlist. if something goes wrong try putting it in \"Quotes\""
+    )
+    parser.add_argument(
+        "-n",
+        "--no-playlist",
+        dest="no_playlist",
+        action="store_false",
+        help="Will only print out the songs and not create a playlist"
+    )
+    parser.add_argument(
+        "-pc",
+        "--print-Clusters",
+        dest="print_clustes",
+        action="store_true",
+        help="will print all of the tracks in each clustering"
+    )
+    args = parser.parse_args()
+    main(args.playlist, args.no_playlist, args.print_clusters)
