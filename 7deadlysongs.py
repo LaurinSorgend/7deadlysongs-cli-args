@@ -384,7 +384,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-pc",
         "--print-Clusters",
-        dest="print_clustes",
+        dest="print_clusters",
         action="store_true",
         help="will print all of the tracks in each clustering"
     )
